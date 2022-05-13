@@ -1,0 +1,58 @@
+# Создаем функцию двоичного поиска
+def binary_search(array, element, left, right):
+    if left > right:
+        return False
+    middle = (right + left) // 2
+    if array[middle] == element:
+        return middle
+    elif element < array[middle]:
+        return binary_search(array, element, left, middle - 1)
+    else:
+        return binary_search(array, element, middle + 1, right)
+
+
+is_all_digit = False
+digits = []
+while not is_all_digit:
+    string_numbers = input('Введите последовательность чисел: ')
+    raw_values = string_numbers.split()
+
+    try:
+        # Переводим все в цифры, если будет буква, то будет ошибка и затем повторный ввод.
+        digits = list(map(int, raw_values))
+        is_all_digit = True
+    except ValueError:
+        print("Необходимо вводить только цифры!")
+
+# Сортируем список, по умолчанию по возрастанию
+digits.sort()
+
+# Вспомогательные переменные, флажки что все ОК
+is_digit = False
+in_range = False
+search_digit = None
+length = len(digits)
+found = False
+index = None
+while (not is_digit) or (not in_range) or (not found):
+    search_digit_string = input('Введите число для поиска: ')
+    try:
+        search_digit = int(search_digit_string)
+        is_digit = True
+    except ValueError:
+        print("Необходимо вводить только цифры!")
+        continue
+    if (search_digit < digits[0]) or (search_digit > digits[length - 1]):
+        print("Не удовлетворяет условиям задачи. Необходимо число в диапазоне введенных чисел")
+        continue
+    else:
+        in_range = True
+
+    # Ищем число и получаем индекс
+    index = binary_search(digits, search_digit, 0, length - 1)
+    if index is False:
+        print(f'Число не найдено в cписке')
+    else:
+        found = True
+print('----------------------------------')
+print(f'Число найдено! Индекс элемента: {index}')
